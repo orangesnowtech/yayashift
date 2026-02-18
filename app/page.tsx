@@ -1,65 +1,98 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50">
+      {/* Header */}
+      <header className="bg-green-700 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-3xl font-bold text-center">
+            Favoured Family Regional Shift Competition
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-center mt-2 text-green-100">
+            March 27-28, 2026
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          {/* Event Information Card */}
+          <div className="bg-white rounded-lg shadow-xl p-8 mb-8 border-t-4 border-orange-500">
+            <h2 className="text-2xl font-bold text-green-800 mb-4">
+              Welcome to the Audition Portal
+            </h2>
+            <div className="space-y-4 text-gray-700">
+              <p className="text-lg">
+                Join us for an exciting competition showcasing the best talent from our regions!
+              </p>
+              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-600">
+                <h3 className="font-semibold text-green-800 mb-2">Event Schedule:</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-start">
+                    <span className="text-orange-600 font-bold mr-2">•</span>
+                    <span><strong>Semi-Final:</strong> March 27, 2026 - 15 selected participants</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 font-bold mr-2">•</span>
+                    <span><strong>Final:</strong> March 28, 2026 - 6 finalists</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-600">
+                <h3 className="font-semibold text-orange-800 mb-2">Important Information:</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-start">
+                    <span className="text-green-600 font-bold mr-2">✓</span>
+                    <span>Complete all required fields accurately</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 font-bold mr-2">✓</span>
+                    <span>Upload your audition video and payment proof</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 font-bold mr-2">✓</span>
+                    <span>You cannot edit your submission after submitting</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 font-bold mr-2">✓</span>
+                    <span>You will receive an email confirmation upon submission</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <Link
+              href="/submit"
+              className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-6 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
+            >
+              <div className="text-2xl mb-2">🎤</div>
+              <div className="text-xl">Submit Your Audition</div>
+              <div className="text-sm text-green-100 mt-2">Start your application</div>
+            </Link>
+            
+            <Link
+              href="/admin"
+              className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold py-6 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
+            >
+              <div className="text-2xl mb-2">👨‍💼</div>
+              <div className="text-xl">Admin Portal</div>
+              <div className="text-sm text-orange-100 mt-2">Review submissions</div>
+            </Link>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-6 mt-12">
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2026 Favoured Family Regional Shift Competition. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
