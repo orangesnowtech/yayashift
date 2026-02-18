@@ -9,7 +9,7 @@ function SuccessContent() {
   const submissionId = searchParams.get('id');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50 flex items-center justify-center px-4">
       <div className="max-w-2xl w-full">
         <div className="bg-white rounded-lg shadow-2xl p-8 text-center">
           {/* Success Icon */}
@@ -85,7 +85,7 @@ function SuccessContent() {
           {/* Action Button */}
           <Link
             href="/"
-            className="inline-block bg-gradient-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="inline-block bg-linear-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
             Back to Home
           </Link>
@@ -103,7 +103,7 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>

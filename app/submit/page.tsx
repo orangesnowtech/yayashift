@@ -135,7 +135,7 @@ export default function SubmitAudition() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50">
       {/* Header */}
       <header className="bg-green-700 text-white shadow-lg">
         <div className="container mx-auto px-4 py-6">

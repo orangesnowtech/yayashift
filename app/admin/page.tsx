@@ -104,7 +104,7 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full">
           <div className="bg-white rounded-lg shadow-xl p-8">
             <div className="text-center mb-6">
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200"
+                className="w-full bg-linear-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200"
               >
                 Login
               </button>
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-green-700 to-orange-700 text-white shadow-lg">
         <div className="container mx-auto px-4 py-6">
@@ -347,7 +347,7 @@ export default function AdminDashboard() {
       {selectedSubmission && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-gradient-to-r from-green-600 to-orange-600 text-white p-6 flex justify-between items-center">
+            <div className="sticky top-0 bg-linear-to-r from-green-600 to-orange-600 text-white p-6 flex justify-between items-center">
               <h2 className="text-2xl font-bold">Submission Details</h2>
               <button
                 onClick={() => setSelectedSubmission(null)}

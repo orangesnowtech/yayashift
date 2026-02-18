@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50">
       {/* Header */}
       <header className="bg-green-700 text-white shadow-lg">
         <div className="container mx-auto px-4 py-6">
@@ -78,7 +78,7 @@ export default function Home() {
           <div className="flex justify-center">
             <Link
               href="/submit"
-              className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-6 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
+              className="bg-linear-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-6 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
             >
               <div className="text-2xl mb-2">🎤</div>
               <div className="text-xl">Submit Your Audition</div>
