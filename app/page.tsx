@@ -6,12 +6,22 @@ export default function Home() {
       {/* Header */}
       <header className="bg-green-700 text-white shadow-lg">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-center">
-            Favoured Family Regional Shift Competition
-          </h1>
-          <p className="text-center mt-2 text-green-100">
-            March 27-28, 2026
-          </p>
+          <div className="flex justify-between items-center">
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold text-center">
+                Favoured Family Regional Shift Competition
+              </h1>
+              <p className="text-center mt-2 text-green-100">
+                March 27-28, 2026
+              </p>
+            </div>
+            <Link
+              href="/admin"
+              className="text-green-100 hover:text-white text-sm underline"
+            >
+              Admin
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -64,8 +74,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* Action Button */}
+          <div className="flex justify-center">
             <Link
               href="/submit"
               className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-6 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
@@ -73,15 +83,6 @@ export default function Home() {
               <div className="text-2xl mb-2">🎤</div>
               <div className="text-xl">Submit Your Audition</div>
               <div className="text-sm text-green-100 mt-2">Start your application</div>
-            </Link>
-            
-            <Link
-              href="/admin"
-              className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold py-6 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
-            >
-              <div className="text-2xl mb-2">👨‍💼</div>
-              <div className="text-xl">Admin Portal</div>
-              <div className="text-sm text-orange-100 mt-2">Review submissions</div>
             </Link>
           </div>
         </div>
