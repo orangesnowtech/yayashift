@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SendMailClient } from 'zeptomail';
 
+/**
+ * Send email notification using ZeptoMail
+ * 
+ * Required environment variables:
+ * - ZEPTOMAIL_API_KEY: Format should be "Zoho-enczapikey YOUR_TOKEN_HERE"
+ * - ZEPTOMAIL_FROM_EMAIL: Sender email address (e.g., noreply@yourdomain.com)
+ * - ZEPTOMAIL_FROM_NAME: Sender name (optional)
+ */
 export async function POST(request: NextRequest) {
   try {
     const { to, firstName, lastName, submissionId } = await request.json();
@@ -16,8 +25,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailContent = {
-      bounce_address: fromEmail,
+    // Initialize ZeptoMail client
+    const url = 'https://api.zeptomail.com/v1.1/email';
+    const client = new SendMailClient({ url, token: zeptomailApiKey });
+
+    // Send email using ZeptoMail SDK
+    await client.sendMail({
       from: {
         address: fromEmail,
         name: fromName || 'Favoured Family Regional Shift Competition',
@@ -141,22 +154,7 @@ export async function POST(request: NextRequest) {
         </body>
         </html>
       `,
-    };
-
-    const response = await fetch('https://api.zeptomail.com/v1.1/email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: zeptomailApiKey,
-      },
-      body: JSON.stringify(emailContent),
     });
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Zeptomail error:', errorData);
-      throw new Error('Failed to send email');
-    }
 
     return NextResponse.json({ success: true, message: 'Email sent successfully' });
   } catch (error) {

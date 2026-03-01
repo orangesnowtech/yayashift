@@ -1,4 +1,4 @@
-# Branch configuration
+ # Branch configuration
 branches:
   live:
     # Uses the same configuration as default

@@ -3,11 +3,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { storage } from '@/lib/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 import type { FormData } from '@/lib/types';
 
 export default function SubmitAudition() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [paymentProgress, setPaymentProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState('');
   const [error, setError] = useState('');
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [paymentPreview, setPaymentPreview] = useState<string>('');
@@ -78,6 +84,36 @@ export default function SubmitAudition() {
     return null;
   };
 
+  const uploadFileToStorage = async (
+    file: File,
+    path: string,
+    onProgress: (progress: number) => void
+  ): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const storageRef = ref(storage, path);
+      const uploadTask = uploadBytesResumable(storageRef, file, {
+        contentType: file.type,
+      });
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          onProgress(progress);
+        },
+        (error) => {
+          reject(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        }
+      );
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -95,29 +131,58 @@ export default function SubmitAudition() {
     if (!confirmed) return;
 
     setIsSubmitting(true);
+    setVideoProgress(0);
+    setPaymentProgress(0);
+    setUploadStatus('Starting upload...');
 
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('firstName', formData.firstName);
-      formDataToSend.append('lastName', formData.lastName);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('phoneNumber', formData.phoneNumber);
-      formDataToSend.append('region', formData.region);
-      formDataToSend.append('province', formData.province);
-      formDataToSend.append('parishName', formData.parishName);
-      formDataToSend.append('parishPastorName', formData.parishPastorName);
-      formDataToSend.append('description', formData.description);
-      
+      const submissionId = uuidv4();
+      let auditionVideoUrl = '';
+      let paymentProofUrl = '';
+
+      // Upload audition video
       if (formData.auditionVideo) {
-        formDataToSend.append('auditionVideo', formData.auditionVideo);
-      }
-      if (formData.paymentProof) {
-        formDataToSend.append('paymentProof', formData.paymentProof);
+        setUploadStatus('Uploading audition video...');
+        const videoExtension = formData.auditionVideo.name.split('.').pop();
+        auditionVideoUrl = await uploadFileToStorage(
+          formData.auditionVideo,
+          `auditions/${submissionId}/video.${videoExtension}`,
+          setVideoProgress
+        );
       }
 
+      // Upload payment proof
+      if (formData.paymentProof) {
+        setUploadStatus('Uploading payment proof...');
+        const paymentExtension = formData.paymentProof.name.split('.').pop();
+        paymentProofUrl = await uploadFileToStorage(
+          formData.paymentProof,
+          `auditions/${submissionId}/payment.${paymentExtension}`,
+          setPaymentProgress
+        );
+      }
+
+      // Submit to API
+      setUploadStatus('Saving submission...');
       const response = await fetch('/api/submit', {
         method: 'POST',
-        body: formDataToSend,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          region: formData.region,
+          province: formData.province,
+          parishName: formData.parishName,
+          parishPastorName: formData.parishPastorName,
+          description: formData.description,
+          auditionVideoUrl,
+          paymentProofUrl,
+          submissionId,
+        }),
       });
 
       const data = await response.json();
@@ -126,11 +191,18 @@ export default function SubmitAudition() {
         throw new Error(data.error || 'Submission failed');
       }
 
+      setUploadStatus('Success! Redirecting...');
+
       // Success - redirect to success page
-      router.push(`/success?id=${data.id}`);
+      setTimeout(() => {
+        router.push(`/success?id=${data.id}`);
+      }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred. Please try again.');
       setIsSubmitting(false);
+      setVideoProgress(0);
+      setPaymentProgress(0);
+      setUploadStatus('');
     }
   };
 
@@ -432,6 +504,46 @@ export default function SubmitAudition() {
                   )}
                 </button>
               </div>
+
+              {/* Upload Progress */}
+              {isSubmitting && (
+                <div className="mt-6 bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                  <p className="font-semibold text-blue-900 mb-4">{uploadStatus}</p>
+                  
+                  {/* Video Upload Progress */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-sm font-medium text-blue-800">🎥 Audition Video</p>
+                      <p className="text-blue-700 font-bold">{videoProgress}%</p>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-full h-3 overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-green-500 to-green-600 h-full transition-all duration-300 ease-out"
+                        style={{ width: `${videoProgress}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Payment Upload Progress */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-sm font-medium text-blue-800">💳 Payment Proof</p>
+                      <p className="text-blue-700 font-bold">{paymentProgress}%</p>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-full h-3 overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-orange-500 to-orange-600 h-full transition-all duration-300 ease-out"
+                        style={{ width: `${paymentProgress}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-blue-700 mt-4 flex items-center gap-2">
+                    <span className="animate-pulse">⚠️</span>
+                    Please do not close this page or navigate away.
+                  </p>
+                </div>
+              )}
             </form>
           </div>
         </div>

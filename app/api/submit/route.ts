@@ -1,25 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, storage } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
+    const body = await request.json();
 
     // Extract form fields
-    const firstName = formData.get('firstName') as string;
-    const lastName = formData.get('lastName') as string;
-    const email = formData.get('email') as string;
-    const phoneNumber = formData.get('phoneNumber') as string;
-    const region = formData.get('region') as string;
-    const province = formData.get('province') as string;
-    const parishName = formData.get('parishName') as string;
-    const parishPastorName = formData.get('parishPastorName') as string;
-    const description = formData.get('description') as string;
-    const auditionVideo = formData.get('auditionVideo') as File;
-    const paymentProof = formData.get('paymentProof') as File;
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      region,
+      province,
+      parishName,
+      parishPastorName,
+      description,
+      auditionVideoUrl,
+      paymentProofUrl,
+      submissionId,
+    } = body;
 
     // Validate required fields
     if (
@@ -32,41 +33,15 @@ export async function POST(request: NextRequest) {
       !parishName ||
       !parishPastorName ||
       !description ||
-      !auditionVideo ||
-      !paymentProof
+      !auditionVideoUrl ||
+      !paymentProofUrl ||
+      !submissionId
     ) {
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
       );
     }
-
-    // Upload files to Firebase Storage
-    const submissionId = uuidv4();
-
-    // Upload audition video
-    const videoExtension = auditionVideo.name.split('.').pop();
-    const videoRef = ref(
-      storage,
-      `auditions/${submissionId}/video.${videoExtension}`
-    );
-    const videoBuffer = await auditionVideo.arrayBuffer();
-    await uploadBytes(videoRef, videoBuffer, {
-      contentType: auditionVideo.type,
-    });
-    const auditionVideoUrl = await getDownloadURL(videoRef);
-
-    // Upload payment proof
-    const paymentExtension = paymentProof.name.split('.').pop();
-    const paymentRef = ref(
-      storage,
-      `auditions/${submissionId}/payment.${paymentExtension}`
-    );
-    const paymentBuffer = await paymentProof.arrayBuffer();
-    await uploadBytes(paymentRef, paymentBuffer, {
-      contentType: paymentProof.type,
-    });
-    const paymentProofUrl = await getDownloadURL(paymentRef);
 
     // Save submission to Firestore
     const submissionData = {
