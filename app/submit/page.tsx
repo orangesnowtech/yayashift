@@ -24,6 +24,8 @@ export default function SubmitAudition() {
     email: '',
     phoneNumber: '',
     region: '',
+    zone: '',
+    area: '',
     province: '',
     parishName: '',
     parishPastorName: '',
@@ -62,6 +64,10 @@ export default function SubmitAudition() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'Invalid email format';
     if (!formData.phoneNumber.trim()) return 'Phone number is required';
     if (!formData.region) return 'Region is required';
+    if (!formData.zone.trim()) return 'Zone is required';
+    if (!/^\d+$/.test(formData.zone)) return 'Zone must be a valid number';
+    if (!formData.area.trim()) return 'Area is required';
+    if (!/^\d+$/.test(formData.area)) return 'Area must be a valid number';
     if (!formData.province.trim()) return 'Province is required';
     if (!formData.parishName.trim()) return 'Parish name is required';
     if (!formData.parishPastorName.trim()) return 'Parish pastor name is required';
@@ -175,6 +181,8 @@ export default function SubmitAudition() {
           email: formData.email,
           phoneNumber: formData.phoneNumber,
           region: formData.region,
+          zone: parseInt(formData.zone),
+          area: parseInt(formData.area),
           province: formData.province,
           parishName: formData.parishName,
           parishPastorName: formData.parishPastorName,
@@ -352,6 +360,37 @@ export default function SubmitAudition() {
                 <div className="grid md:grid-cols-2 gap-4 mt-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Zone <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      name="zone"
+                      value={formData.zone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      min="1"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Area <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      name="area"
+                      value={formData.area}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      min="1"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Parish Name <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -436,8 +475,32 @@ export default function SubmitAudition() {
                   )}
                 </div>
 
+                {/* Payment Instructions */}
+                <div className="col-span-2 bg-gradient-to-r from-green-50 to-orange-50 border-2 border-green-300 rounded-lg p-6">
+                  <h3 className="text-lg font-bold text-green-800 mb-3 flex items-center gap-2">
+                    💳 Payment Details
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Please make your payment to the account below and upload proof of payment:
+                  </p>
+                  <div className="bg-white rounded-lg p-4 space-y-3 border border-green-200">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-semibold text-gray-600">Bank Name:</span>
+                      <span className="text-base font-bold text-gray-900">Providus Bank</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-semibold text-gray-600">Account Number:</span>
+                      <span className="text-base font-bold text-gray-900 font-mono">4706098097</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-semibold text-gray-600">Account Name:</span>
+                      <span className="text-base font-bold text-gray-900">RCCG Region 20 Youth Affairs</span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Payment Proof */}
-                <div>
+                <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Payment Proof <span className="text-red-600">*</span>
                   </label>

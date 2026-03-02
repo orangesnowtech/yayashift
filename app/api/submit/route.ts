@@ -13,6 +13,8 @@ export async function POST(request: NextRequest) {
       email,
       phoneNumber,
       region,
+      zone,
+      area,
       province,
       parishName,
       parishPastorName,
@@ -29,6 +31,10 @@ export async function POST(request: NextRequest) {
       !email ||
       !phoneNumber ||
       !region ||
+      zone === undefined ||
+      zone === null ||
+      area === undefined ||
+      area === null ||
       !province ||
       !parishName ||
       !parishPastorName ||
@@ -50,6 +56,8 @@ export async function POST(request: NextRequest) {
       email,
       phoneNumber,
       region,
+      zone,
+      area,
       province,
       parishName,
       parishPastorName,

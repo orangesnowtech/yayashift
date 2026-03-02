@@ -392,6 +392,14 @@ export default function AdminDashboard() {
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
+                    <label className="text-sm font-medium text-gray-600">Zone</label>
+                    <p className="text-gray-900">{selectedSubmission.zone}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Area</label>
+                    <p className="text-gray-900">{selectedSubmission.area}</p>
+                  </div>
+                  <div>
                     <label className="text-sm font-medium text-gray-600">Province</label>
                     <p className="text-gray-900">{selectedSubmission.province}</p>
                   </div>

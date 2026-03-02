@@ -5,6 +5,8 @@ export interface Submission {
   email: string;
   phoneNumber: string;
   region: 'Region 20' | 'Region 51';
+  zone: number;
+  area: number;
   province: string;
   parishName: string;
   parishPastorName: string;
@@ -22,6 +24,8 @@ export interface FormData {
   email: string;
   phoneNumber: string;
   region: 'Region 20' | 'Region 51' | '';
+  zone: string;
+  area: string;
   province: string;
   parishName: string;
   parishPastorName: string;
