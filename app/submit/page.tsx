@@ -132,7 +132,7 @@ export default function SubmitAudition() {
 
     // Confirmation dialog
     const confirmed = window.confirm(
-      'Are you sure you want to submit? You will not be able to edit your submission after submitting.'
+      'Are you sure you want to submit? Take Note You will not be able to edit your submission after submitting.'
     );
     if (!confirmed) return;
 
@@ -218,15 +218,15 @@ export default function SubmitAudition() {
     <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50">
       {/* Header */}
       <header className="bg-green-700 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold">Submit Your Audition</h1>
-              <p className="text-green-100 mt-1">Favoured Family Regional Shift Competition</p>
+        <div className="container mx-auto px-4 py-4 md:py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="text-center sm:text-left">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">Submit Your Audition</h1>
+              <p className="text-green-100 mt-1 text-sm md:text-base">Favoured Family Regional Shift Competition</p>
             </div>
             <Link
               href="/"
-              className="bg-white text-green-700 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors"
+              className="bg-white text-green-700 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors text-sm md:text-base whitespace-nowrap"
             >
               ← Back to Home
             </Link>
@@ -271,7 +271,7 @@ export default function SubmitAudition() {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -284,7 +284,7 @@ export default function SubmitAudition() {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -300,7 +300,7 @@ export default function SubmitAudition() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -313,7 +313,7 @@ export default function SubmitAudition() {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -334,7 +334,7 @@ export default function SubmitAudition() {
                       name="region"
                       value={formData.region}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     >
                       <option value="">Select Region</option>
@@ -351,7 +351,7 @@ export default function SubmitAudition() {
                       name="province"
                       value={formData.province}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -367,7 +367,7 @@ export default function SubmitAudition() {
                       name="zone"
                       value={formData.zone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       min="1"
                       required
                     />
@@ -381,7 +381,7 @@ export default function SubmitAudition() {
                       name="area"
                       value={formData.area}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       min="1"
                       required
                     />
@@ -398,7 +398,7 @@ export default function SubmitAudition() {
                       name="parishName"
                       value={formData.parishName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -411,7 +411,7 @@ export default function SubmitAudition() {
                       name="parishPastorName"
                       value={formData.parishPastorName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       required
                     />
                   </div>
@@ -432,7 +432,7 @@ export default function SubmitAudition() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={6}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Minimum 50 characters..."
                     required
                   />
@@ -444,7 +444,7 @@ export default function SubmitAudition() {
 
               {/* File Uploads */}
               <div>
-                <h2 className="text-xl font-bold text-green-800 mb-4 pb-2 border-b-2 border-green-200">
+                <h2 className="text-xl text-gray-800 font-bold text-green-800 mb-4 pb-2 border-b-2 border-green-200">
                   Upload Files
                 </h2>
                 
@@ -458,7 +458,7 @@ export default function SubmitAudition() {
                     name="auditionVideo"
                     onChange={handleFileChange}
                     accept="video/mp4,video/quicktime,video/x-msvideo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
                   <p className="text-sm text-gray-500 mt-1">
@@ -469,7 +469,7 @@ export default function SubmitAudition() {
                       <video
                         src={videoPreview}
                         controls
-                        className="w-full max-w-md rounded-lg border-2 border-green-200"
+                        className="w-full text-gray-800 max-w-md rounded-lg border-2 border-green-200"
                       />
                     </div>
                   )}
@@ -484,6 +484,11 @@ export default function SubmitAudition() {
                     Please make your payment to the account below and upload proof of payment:
                   </p>
                   <div className="bg-white rounded-lg p-4 space-y-3 border border-green-200">
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-semibold text-gray-600">Amount:</span>
+                      <span className="text-base font-bold text-gray-900">₦5,000</span>
+                    </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-semibold text-gray-600">Bank Name:</span>
                       <span className="text-base font-bold text-gray-900">Providus Bank</span>
@@ -509,7 +514,7 @@ export default function SubmitAudition() {
                     name="paymentProof"
                     onChange={handleFileChange}
                     accept="image/jpeg,image/jpg,image/png,application/pdf"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
                   <p className="text-sm text-gray-500 mt-1">

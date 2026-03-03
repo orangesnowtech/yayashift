@@ -174,24 +174,24 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-green-700 to-orange-700 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-              <p className="text-green-100 mt-1">
+        <div className="container mx-auto px-4 py-4 md:py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <h1 className="text-2xl md:text-3xl font-bold">Admin Dashboard</h1>
+              <p className="text-green-100 mt-1 text-sm md:text-base">
                 Favoured Family Regional Shift Competition
               </p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-3 md:gap-4">
               <Link
                 href="/"
-                className="bg-white text-green-700 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors"
+                className="bg-white text-green-700 px-3 md:px-4 py-2 rounded-lg hover:bg-green-50 transition-colors text-sm md:text-base"
               >
                 Home
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                className="bg-red-600 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm md:text-base"
               >
                 Logout
               </button>

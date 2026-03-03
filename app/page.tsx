@@ -40,86 +40,83 @@ export default function Home() {
     <div className="min-h-screen bg-linear-to-br from-green-50 via-orange-50 to-green-50">
       {/* Header */}
       <header className="bg-green-700 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <Image
-              src="/rccg-logo-noBg-2.png"
-              alt="RCCG Logo"
-              width={80}
-              height={80}
-              className="object-contain"
-            />
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold text-center">
+        <div className="container mx-auto px-4 py-4 md:py-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <div className="flex justify-center md:justify-start">
+              <Image
+                src="/rccg-logo-noBg-2.png"
+                alt="RCCG Logo"
+                width={60}
+                height={60}
+                className="object-contain md:w-[80px] md:h-[80px]"
+              />
+            </div>
+            <div className="flex-1 text-center">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
                 Favoured Family Regional Shift Competition
               </h1>
-              <p className="text-center mt-2 text-green-100">
+              <p className="text-center mt-1 md:mt-2 text-green-100 text-sm md:text-base">
                 March 27-28, 2026
               </p>
             </div>
-            <Link
-              href="/admin"
-              className="text-green-100 hover:text-white text-sm underline"
-            >
-              Admin
-            </Link>
+            <div className="hidden md:block w-[80px]"></div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-6 md:py-12">
         {/* Hero Section */}
-        <section className="max-w-6xl mx-auto mb-16 text-center">
-          <div className="bg-gradient-to-br from-green-700 via-green-600 to-orange-600 text-white rounded-2xl shadow-2xl p-12 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -ml-24 -mb-24"></div>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16 text-center">
+          <div className="bg-gradient-to-br from-green-700 via-green-600 to-orange-600 text-white rounded-xl md:rounded-2xl shadow-2xl p-6 sm:p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 md:w-64 md:h-64 bg-white opacity-5 rounded-full -mr-16 md:-mr-32 -mt-16 md:-mt-32"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 md:w-48 md:h-48 bg-white opacity-5 rounded-full -ml-12 md:-ml-24 -mb-12 md:-mb-24"></div>
             <div className="relative z-10">
-              <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 leading-tight">
                 Unleash Your Gift:<br />
                 <span className="text-orange-200">Regional Shift Talent Hunt 2026</span>
               </h1>
-              <p className="text-xl md:text-2xl mb-8 text-green-50 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 text-green-50 max-w-3xl mx-auto px-2">
                 The ultimate platform for young creatives within the Favored Family community to showcase their talent, win life-changing prizes, and gain global exposure.
               </p>
               <Link
                 href="/submit"
-                className="inline-block bg-white text-green-700 font-bold py-4 px-12 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 text-xl hover:shadow-2xl"
+                className="inline-block bg-white text-green-700 font-bold py-3 px-8 md:py-4 md:px-12 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 text-base md:text-xl hover:shadow-2xl"
               >
-                <span className="text-2xl mr-2">🎥</span>
+                <span className="text-xl md:text-2xl mr-2">🎥</span>
                 Submit Your Audition
               </Link>
               
               {/* Countdown Timer */}
-              <div className="mt-3 bg-white  bg-opacity-20 backdrop-blur-sm rounded-lg p-4 max-w-xl mx-auto">
-                <p className=" text-green-700 text-base font-semibold mb-3">⏰ Auditions Close In:</p>
-                <div className="grid grid-cols-4 gap-2">
-                  <div className=" bg-opacity-30 rounded-lg p-2">
-                    <div className="text-2xl font-bold text-green-700">{timeLeft.days}</div>
-                    <div className="text-xs text-green-500 mt-1">Days</div>
+              <div className="mt-4 md:mt-3 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-3 md:p-4 max-w-xl mx-auto">
+                <p className="text-green-700 text-sm md:text-base font-semibold mb-2 md:mb-3">⏰ Auditions Close In:</p>
+                <div className="grid grid-cols-4 gap-1 md:gap-2">
+                  <div className="bg-white bg-opacity-30 rounded-lg p-1.5 md:p-2">
+                    <div className="text-lg md:text-2xl font-bold text-green-700">{timeLeft.days}</div>
+                    <div className="text-[10px] md:text-xs text-green-500 mt-0.5 md:mt-1">Days</div>
                   </div>
-                  <div className="bg-white bg-opacity-30 rounded-lg p-2">
-                    <div className="text-2xl font-bold text-green-700">{timeLeft.hours}</div>
-                    <div className="text-xs text-green-500 mt-1">Hours</div>
+                  <div className="bg-white bg-opacity-30 rounded-lg p-1.5 md:p-2">
+                    <div className="text-lg md:text-2xl font-bold text-green-700">{timeLeft.hours}</div>
+                    <div className="text-[10px] md:text-xs text-green-500 mt-0.5 md:mt-1">Hours</div>
                   </div>
-                  <div className="bg-white bg-opacity-30 rounded-lg p-2">
-                    <div className="text-2xl font-bold text-green-700">{timeLeft.minutes}</div>
-                    <div className="text-xs text-green-500 mt-1">Minutes</div>
+                  <div className="bg-white bg-opacity-30 rounded-lg p-1.5 md:p-2">
+                    <div className="text-lg md:text-2xl font-bold text-green-700">{timeLeft.minutes}</div>
+                    <div className="text-[10px] md:text-xs text-green-500 mt-0.5 md:mt-1">Minutes</div>
                   </div>
-                  <div className="bg-white bg-opacity-30 rounded-lg p-2">
-                    <div className="text-2xl font-bold text-green-700">{timeLeft.seconds}</div>
-                    <div className="text-xs text-green-500 mt-1">Seconds</div>
+                  <div className="bg-white bg-opacity-30 rounded-lg p-1.5 md:p-2">
+                    <div className="text-lg md:text-2xl font-bold text-green-700">{timeLeft.seconds}</div>
+                    <div className="text-[10px] md:text-xs text-green-500 mt-0.5 md:mt-1">Seconds</div>
                   </div>
                 </div>
-                <p className="text-green-700 text-xs mt-3">Sunday, March 22 at 6:00 PM</p>
+                <p className="text-green-700 text-[10px] md:text-xs mt-2 md:mt-3">Sunday, March 22 at 6:00 PM</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Overview Section */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Overview</h2>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">Overview</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {/* Vision */}
             <div className="bg-white rounded-xl shadow-lg p-8 border-t-4 border-green-600 hover:shadow-2xl transition-shadow">
@@ -174,8 +171,8 @@ export default function Home() {
         </section>
 
         {/* Road Map Section */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Road Map</h2>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">Road Map</h2>
           <div className="space-y-8">
             {/* Phase 1 */}
             <div className="bg-gradient-to-r from-green-50 to-orange-50 rounded-xl shadow-lg p-8 border-l-4 border-green-600">
@@ -230,8 +227,8 @@ export default function Home() {
         </section>
 
         {/* Judging Criteria Section */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Judging Criteria</h2>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">Judging Criteria</h2>
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h3 className="text-2xl font-semibold text-orange-800 mb-6 text-center">Judges&apos; Scoring Criteria</h3>
             <div className="grid md:grid-cols-3 gap-6">
@@ -264,8 +261,8 @@ export default function Home() {
         </section>
 
         {/* Cash Prizes Section */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Cash Prizes</h2>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">Cash Prizes</h2>
           <div className="bg-gradient-to-br from-green-700 to-orange-600 rounded-xl shadow-2xl p-8 text-white">
             <p className="text-center text-xl mb-8 text-white font-semibold">Per Category</p>
             <div className="grid md:grid-cols-3 gap-8">
@@ -289,8 +286,8 @@ export default function Home() {
         </section>
 
         {/* The "Favored" Advantage Section */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">The &quot;Favored&quot; Advantage</h2>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">The &quot;Favored&quot; Advantage</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow">
               <div className="text-4xl mb-4 text-center">🎵</div>
@@ -317,8 +314,8 @@ export default function Home() {
         </section>
 
         {/* Eligibility & Rules Section */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Eligibility & Rules</h2>
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">Eligibility & Rules</h2>
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="space-y-6">
               <div className="flex items-start">
@@ -347,7 +344,7 @@ export default function Home() {
         </section>
 
         {/* Important Information from Original */}
-        <section className="max-w-6xl mx-auto mb-16">
+        <section className="max-w-6xl mx-auto mb-8 md:mb-16">
           <div className="bg-orange-50 rounded-xl shadow-lg p-8 border-l-4 border-orange-600">
             <h3 className="text-2xl font-bold text-orange-800 mb-6">Important Information:</h3>
             <ul className="space-y-3">
@@ -373,14 +370,14 @@ export default function Home() {
 
         {/* Call to Action */}
         <section className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-green-600 to-orange-600 rounded-2xl shadow-2xl p-12 text-white">
-            <h2 className="text-3xl font-bold mb-4">Ready to Showcase Your Talent?</h2>
-            <p className="text-xl mb-8 text-green-50">Join the Regional Shift Talent Hunt 2026 today!</p>
+          <div className="bg-gradient-to-r from-green-600 to-orange-600 rounded-xl md:rounded-2xl shadow-2xl p-6 sm:p-8 md:p-12 text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 md:mb-4">Ready to Showcase Your Talent?</h2>
+            <p className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-green-50">Join the Regional Shift Talent Hunt 2026 today!</p>
             <Link
               href="/submit"
-              className="inline-block bg-white text-green-700 font-bold py-4 px-12 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 text-xl hover:shadow-2xl"
+              className="inline-block bg-white text-green-700 font-bold py-3 px-8 md:py-4 md:px-12 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 text-base md:text-xl hover:shadow-2xl"
             >
-              <span className="text-2xl mr-2">🎥</span>
+              <span className="text-xl md:text-2xl mr-2">🎥</span>
               Submit Your Audition
             </Link>
           </div>
@@ -388,9 +385,15 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-6 mt-12">
+      <footer className="bg-gray-800 text-white py-6 mt-8 md:mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2026 Favoured Family Regional Shift Competition. All rights reserved.</p>
+          <p className="text-sm md:text-base">&copy; 2026 Favoured Family Regional Shift Competition. All rights reserved.</p>
+          <Link
+              href="/admin"
+              className="text-green-100 hover:text-white text-sm underline"
+            >
+              Admin
+            </Link>
         </div>
       </footer>
     </div>
