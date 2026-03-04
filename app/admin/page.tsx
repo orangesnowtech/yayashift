@@ -340,6 +340,9 @@ export default function AdminDashboard() {
                       Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Email
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -362,6 +365,11 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium text-gray-900">
                           {submission.firstName} {submission.lastName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="font-mono text-sm font-semibold text-orange-600">
+                          {submission.friendlyId || 'N/A'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -414,6 +422,22 @@ export default function AdminDashboard() {
             </div>
 
             <div className="p-6">
+              {/* Submission ID Highlight */}
+              <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="text-sm font-medium text-orange-800">Submission ID</label>
+                    <p className="text-2xl font-bold text-orange-900 tracking-wider font-mono">
+                      {selectedSubmission.friendlyId || selectedSubmission.id}
+                    </p>
+                  </div>
+                  <div className="text-sm text-orange-700">
+                    <span className="block">Submitted on</span>
+                    <span className="font-medium">{new Date(selectedSubmission.submittedAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Personal Info */}
               <div className="mb-6">
                 <h3 className="text-lg font-bold text-gray-800 mb-3 pb-2 border-b-2 border-green-200">

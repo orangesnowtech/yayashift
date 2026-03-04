@@ -1,5 +1,6 @@
 export interface Submission {
   id?: string;
+  friendlyId?: string;
   firstName: string;
   lastName: string;
   email: string;

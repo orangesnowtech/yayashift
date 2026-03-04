@@ -1,7 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { SendMailClient } from 'zeptomail';
+
+/**
+ * Generate a unique 6-character alphanumeric ID
+ */
+function generateFriendlyId(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Excluding similar-looking chars (0,O,1,I)
+  let id = '';
+  for (let i = 0; i < 6; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+}
+
+/**
+ * Check if friendly ID already exists in Firestore
+ */
+async function isIdUnique(friendlyId: string): Promise<boolean> {
+  const q = query(collection(db, 'submissions'), where('friendlyId', '==', friendlyId));
+  const snapshot = await getDocs(q);
+  return snapshot.empty;
+}
+
+/**
+ * Generate a unique friendly ID with collision checking
+ */
+async function generateUniqueFriendlyId(): Promise<string> {
+  let friendlyId = generateFriendlyId();
+  let attempts = 0;
+  const maxAttempts = 10;
+  
+  while (attempts < maxAttempts) {
+    if (await isIdUnique(friendlyId)) {
+      return friendlyId;
+    }
+    friendlyId = generateFriendlyId();
+    attempts++;
+  }
+  
+  // If we still have collisions after 10 attempts, add timestamp
+  return friendlyId + Date.now().toString().slice(-2);
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,8 +91,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Generate unique friendly ID
+    const friendlyId = await generateUniqueFriendlyId();
+    console.log('Generated friendly ID:', friendlyId);
+
     // Save submission to Firestore
     const submissionData = {
+      friendlyId,
       firstName,
       lastName,
       email,
@@ -131,10 +177,10 @@ export async function POST(request: NextRequest) {
                   
                   <div class="submission-id">
                     <strong>Your Submission ID:</strong><br>
-                    ${docRef.id}
+                    <span style="font-size: 24px; letter-spacing: 2px; font-weight: bold;">${friendlyId}</span>
                   </div>
                   
-                  <p>Please save this ID for your records. You may need it for future reference.</p>
+                  <p>Please save this ID for your records. You may need it for future reference or inquiries about your submission.</p>
                   
                   <div class="info-box">
                     <h3 style="margin-top: 0; color: #16a34a;">What Happens Next?</h3>
@@ -185,6 +231,7 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         id: docRef.id,
+        friendlyId: friendlyId,
         message: 'Submission successful',
       },
       { status: 201 }
