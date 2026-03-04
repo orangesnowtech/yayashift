@@ -513,6 +513,8 @@ export default function SubmitAudition() {
           {/* Form Card */}
           <div className="bg-white rounded-lg shadow-xl p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Disabled overlay when submitting */}
+              <div className={`${isSubmitting ? 'opacity-50 pointer-events-none' : ''}`}>
               {/* Personal Information */}
               <div>
                 <h2 className="text-xl font-bold text-green-800 mb-4 pb-2 border-b-2 border-green-200">
@@ -528,7 +530,8 @@ export default function SubmitAudition() {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -541,7 +544,8 @@ export default function SubmitAudition() {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -557,7 +561,8 @@ export default function SubmitAudition() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -570,7 +575,8 @@ export default function SubmitAudition() {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -591,7 +597,8 @@ export default function SubmitAudition() {
                       name="region"
                       value={formData.region}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     >
                       <option value="">Select Region</option>
@@ -608,7 +615,8 @@ export default function SubmitAudition() {
                       name="province"
                       value={formData.province}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -624,7 +632,8 @@ export default function SubmitAudition() {
                       name="zone"
                       value={formData.zone}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       min="1"
                       required
                     />
@@ -638,7 +647,8 @@ export default function SubmitAudition() {
                       name="area"
                       value={formData.area}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       min="1"
                       required
                     />
@@ -655,7 +665,8 @@ export default function SubmitAudition() {
                       name="parishName"
                       value={formData.parishName}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -668,7 +679,8 @@ export default function SubmitAudition() {
                       name="parishPastorName"
                       value={formData.parishPastorName}
                       onChange={handleInputChange}
-                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={isSubmitting}
+                      className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       required
                     />
                   </div>
@@ -689,7 +701,8 @@ export default function SubmitAudition() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={6}
-                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    disabled={isSubmitting}
+                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                     placeholder="Minimum 50 characters..."
                     required
                   />
@@ -715,7 +728,8 @@ export default function SubmitAudition() {
                     name="auditionVideo"
                     onChange={handleFileChange}
                     accept="video/mp4,video/quicktime,video/x-msvideo"
-                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    disabled={isSubmitting}
+                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                     required
                   />
                   <div className="flex justify-between items-center">
@@ -778,7 +792,8 @@ export default function SubmitAudition() {
                     name="paymentProof"
                     onChange={handleFileChange}
                     accept="image/jpeg,image/jpg,image/png,application/pdf"
-                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    disabled={isSubmitting}
+                    className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                     required
                   />
                   <div className="flex justify-between items-center">
@@ -802,6 +817,8 @@ export default function SubmitAudition() {
                   )}
                 </div>
               </div>
+              </div>
+              {/* End of disabled overlay wrapper */}
 
               {/* Submit Button */}
               <div className="pt-6 border-t-2 border-gray-200">

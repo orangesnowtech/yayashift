@@ -76,7 +76,8 @@ export async function POST(request: NextRequest) {
 
     // Send email notification
     try {
-      await fetch(`${request.nextUrl.origin}/api/send-email`, {
+      console.log('Attempting to send confirmation email to:', email);
+      const emailResponse = await fetch(`${request.nextUrl.origin}/api/send-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,9 +89,16 @@ export async function POST(request: NextRequest) {
           submissionId: docRef.id,
         }),
       });
+
+      if (!emailResponse.ok) {
+        const emailError = await emailResponse.json();
+        console.error('Email API returned error:', emailError);
+      } else {
+        console.log('Email sent successfully to:', email);
+      }
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
-      // Continue even if email fails
+      console.error('Email sending failed with exception:', emailError);
+      // Continue even if email fails - submission was successful
     }
 
     return NextResponse.json(

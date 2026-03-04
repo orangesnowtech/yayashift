@@ -13,12 +13,24 @@ export async function POST(request: NextRequest) {
   try {
     const { to, firstName, lastName, submissionId } = await request.json();
 
+    console.log('=== Email Sending Request ===');
+    console.log('Recipient:', to);
+    console.log('Name:', firstName, lastName);
+    console.log('Submission ID:', submissionId);
+
     const zeptomailApiKey = process.env.ZEPTOMAIL_API_KEY;
     const fromEmail = process.env.ZEPTOMAIL_FROM_EMAIL;
     const fromName = process.env.ZEPTOMAIL_FROM_NAME;
 
+    console.log('Email config check:');
+    console.log('- API Key present:', !!zeptomailApiKey);
+    console.log('- From Email:', fromEmail);
+    console.log('- From Name:', fromName);
+
     if (!zeptomailApiKey || !fromEmail) {
-      console.error('Zeptomail configuration missing');
+      console.error('❌ Zeptomail configuration missing');
+      console.error('ZEPTOMAIL_API_KEY:', zeptomailApiKey ? 'Present' : 'MISSING');
+      console.error('ZEPTOMAIL_FROM_EMAIL:', fromEmail || 'MISSING');
       return NextResponse.json(
         { error: 'Email service not configured' },
         { status: 500 }
@@ -27,10 +39,14 @@ export async function POST(request: NextRequest) {
 
     // Initialize ZeptoMail client
     const url = 'https://api.zeptomail.com/v1.1/email';
+    console.log('Initializing ZeptoMail client with URL:', url);
+    
     const client = new SendMailClient({ url, token: zeptomailApiKey });
+    console.log('ZeptoMail client initialized successfully');
 
     // Send email using ZeptoMail SDK
-    await client.sendMail({
+    console.log('Sending email...');
+    const result = await client.sendMail({
       from: {
         address: fromEmail,
         name: fromName || 'Favoured Family Regional Shift Competition',
@@ -156,9 +172,20 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ success: true, message: 'Email sent successfully' });
+    console.log('✅ Email sent successfully!');
+    console.log('Email result:', JSON.stringify(result, null, 2));
+
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Email sent successfully',
+      recipient: to 
+    });
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('❌ Email sending error:', error);
+    console.error('Error type:', error instanceof Error ? error.constructor.name : typeof error);
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    
     return NextResponse.json(
       {
         error: 'Failed to send email notification',
