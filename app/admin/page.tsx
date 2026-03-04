@@ -70,6 +70,62 @@ export default function AdminDashboard() {
     }
   };
 
+  const deleteSubmission = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this submission? This will permanently delete the submission and all associated files. This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin/delete-submission', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Submission deleted successfully!');
+        fetchSubmissions();
+        setSelectedSubmission(null);
+      } else {
+        alert(`Failed to delete submission: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error deleting submission:', error);
+      alert('Failed to delete submission. Please try again.');
+    }
+  };
+
+  const resendEmail = async (id: string) => {
+    if (!confirm('Are you sure you want to resend the confirmation email to this applicant?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin/resend-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Email sent successfully!');
+      } else {
+        alert(`Failed to send email: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error resending email:', error);
+      alert('Failed to send email. Please try again.');
+    }
+  };
+
   const handleLogout = () => {
     sessionStorage.removeItem('adminAuth');
     setIsAuthenticated(false);
@@ -524,6 +580,53 @@ export default function AdminDashboard() {
                     className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                   >
                     Rejected
+                  </button>
+                </div>
+              </div>
+
+              {/* Admin Actions */}
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-800 mb-3 pb-2 border-b-2 border-green-200">
+                  Admin Actions
+                </h3>
+                <div className="flex gap-3 flex-wrap">
+                  <button
+                    onClick={() => resendEmail(selectedSubmission.id!)}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                    Resend Email
+                  </button>
+                  <button
+                    onClick={() => deleteSubmission(selectedSubmission.id!)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    Delete Submission
                   </button>
                 </div>
               </div>
