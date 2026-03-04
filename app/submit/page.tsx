@@ -15,6 +15,8 @@ export default function SubmitAudition() {
   const [paymentProgress, setPaymentProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState('');
   const [error, setError] = useState('');
+  const [errorType, setErrorType] = useState<'network' | 'storage' | 'file-size' | 'permission' | 'generic' | ''>('');
+  const [canRetry, setCanRetry] = useState(false);
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [paymentPreview, setPaymentPreview] = useState<string>('');
 
@@ -41,10 +43,45 @@ export default function SubmitAudition() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files[0]) {
       const file = files[0];
+      
+      // Validate file size immediately
+      const maxVideoSize = 500 * 1024 * 1024; // 500MB
+      const maxPaymentSize = 10 * 1024 * 1024; // 10MB
+      
+      if (name === 'auditionVideo' && file.size > maxVideoSize) {
+        const sizeMB = Math.round(file.size / (1024 * 1024));
+        setError(`Video file is too large (${sizeMB}MB). Maximum size is 500MB. Please compress your video or use a shorter clip.`);
+        setErrorType('file-size');
+        e.target.value = ''; // Clear the input
+        return;
+      }
+      
+      if (name === 'paymentProof' && file.size > maxPaymentSize) {
+        const sizeMB = Math.round(file.size / (1024 * 1024));
+        setError(`Payment proof file is too large (${sizeMB}MB). Maximum size is 10MB. Please compress or resize the image.`);
+        setErrorType('file-size');
+        e.target.value = ''; // Clear the input
+        return;
+      }
+      
+      // Clear any previous errors if file is valid
+      if (error && errorType === 'file-size') {
+        setError('');
+        setErrorType('');
+      }
+      
       setFormData((prev) => ({ ...prev, [name]: file }));
 
       // Create preview URL
@@ -87,6 +124,20 @@ export default function SubmitAudition() {
       return 'Payment proof must be JPG, PNG, or PDF format';
     }
 
+    // Validate file sizes
+    const maxVideoSize = 500 * 1024 * 1024; // 500MB
+    const maxPaymentSize = 10 * 1024 * 1024; // 10MB
+    
+    if (formData.auditionVideo && formData.auditionVideo.size > maxVideoSize) {
+      const sizeMB = Math.round(formData.auditionVideo.size / (1024 * 1024));
+      return `Audition video is too large (${sizeMB}MB). Maximum size is 500MB. Please compress your video or use a shorter clip.`;
+    }
+    
+    if (formData.paymentProof && formData.paymentProof.size > maxPaymentSize) {
+      const sizeMB = Math.round(formData.paymentProof.size / (1024 * 1024));
+      return `Payment proof is too large (${sizeMB}MB). Maximum size is 10MB. Please compress or resize the image.`;
+    }
+
     return null;
   };
 
@@ -110,11 +161,73 @@ export default function SubmitAudition() {
           onProgress(progress);
         },
         (error) => {
-          reject(error);
+          // Create detailed error with type information
+          interface EnhancedError extends Error {
+            type?: string;
+            canRetry?: boolean;
+          }
+          
+          const enhancedError: EnhancedError = new Error();
+          
+          // Categorize Firebase Storage errors
+          switch (error.code) {
+            case 'storage/unauthorized':
+              enhancedError.message = 'Upload permission denied. Please try again or contact support.';
+              enhancedError.type = 'permission';
+              enhancedError.canRetry = false;
+              break;
+            case 'storage/canceled':
+              enhancedError.message = 'Upload was canceled. Please try uploading again.';
+              enhancedError.type = 'generic';
+              enhancedError.canRetry = true;
+              break;
+            case 'storage/quota-exceeded':
+              enhancedError.message = 'Storage quota exceeded. Please contact the administrators.';
+              enhancedError.type = 'storage';
+              enhancedError.canRetry = false;
+              break;
+            case 'storage/retry-limit-exceeded':
+              enhancedError.message = 'Upload failed after multiple attempts. Please check your internet connection and try again.';
+              enhancedError.type = 'network';
+              enhancedError.canRetry = true;
+              break;
+            case 'storage/invalid-checksum':
+              enhancedError.message = 'File upload was corrupted. Please try uploading again.';
+              enhancedError.type = 'generic';
+              enhancedError.canRetry = true;
+              break;
+            default:
+              // Check if it's a network error
+              if (error.message?.toLowerCase().includes('network') || 
+                  error.message?.toLowerCase().includes('fetch') ||
+                  error.code === 'storage/unknown') {
+                enhancedError.message = 'Network connection issue detected. Please check your internet connection and try again.';
+                enhancedError.type = 'network';
+                enhancedError.canRetry = true;
+              } else {
+                enhancedError.message = error.message || 'Upload failed. Please try again.';
+                enhancedError.type = 'generic';
+                enhancedError.canRetry = true;
+              }
+          }
+          
+          reject(enhancedError);
         },
         async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          } catch {
+            interface EnhancedError extends Error {
+              type?: string;
+              canRetry?: boolean;
+            }
+            
+            const enhancedError: EnhancedError = new Error('Failed to retrieve uploaded file URL. Please try again.');
+            enhancedError.type = 'network';
+            enhancedError.canRetry = true;
+            reject(enhancedError);
+          }
         }
       );
     });
@@ -123,10 +236,18 @@ export default function SubmitAudition() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setErrorType('');
+    setCanRetry(false);
 
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
+      // Set appropriate error type for validation errors
+      if (validationError.includes('too large') || validationError.includes('Maximum size')) {
+        setErrorType('file-size');
+      } else {
+        setErrorType('generic');
+      }
       return;
     }
 
@@ -206,11 +327,54 @@ export default function SubmitAudition() {
         router.push(`/success?id=${data.id}`);
       }, 500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred. Please try again.');
+      console.error('Submission error:', err);
+      
+      // Determine error type and message
+      let errorMessage = '';
+      let errorCategory: typeof errorType = 'generic';
+      let retryable = true;
+      
+      interface EnhancedError extends Error {
+        type?: string;
+        canRetry?: boolean;
+      }
+      
+      const enhancedErr = err as EnhancedError;
+      
+      if (enhancedErr.type) {
+        // Enhanced error from uploadFileToStorage
+        errorMessage = enhancedErr.message;
+        errorCategory = enhancedErr.type as typeof errorType;
+        retryable = enhancedErr.canRetry !== false;
+      } else if (enhancedErr.message?.toLowerCase().includes('network') || 
+                 enhancedErr.message?.toLowerCase().includes('fetch') ||
+                 enhancedErr.message?.toLowerCase().includes('failed to fetch')) {
+        errorMessage = 'Network connection issue. Please check your internet connection and try again.';
+        errorCategory = 'network';
+        retryable = true;
+      } else if (enhancedErr.message?.toLowerCase().includes('timeout')) {
+        errorMessage = 'Upload timed out. Your file might be too large or your connection might be slow. Please try again.';
+        errorCategory = 'network';
+        retryable = true;
+      } else if (enhancedErr.message?.toLowerCase().includes('quota') || 
+                 enhancedErr.message?.toLowerCase().includes('storage')) {
+        errorMessage = 'Storage limit reached. Please contact the administrators.';
+        errorCategory = 'storage';
+        retryable = false;
+      } else {
+        errorMessage = enhancedErr.message || 'An unexpected error occurred during submission. Please try again.';
+        errorCategory = 'generic';
+        retryable = true;
+      }
+      
+      setError(errorMessage);
+      setErrorType(errorCategory);
+      setCanRetry(retryable);
       setIsSubmitting(false);
-      setVideoProgress(0);
-      setPaymentProgress(0);
       setUploadStatus('');
+      
+      // Scroll to error message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -247,9 +411,102 @@ export default function SubmitAudition() {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 mb-6 rounded">
-              <p className="font-semibold">Error</p>
-              <p className="text-sm mt-1">{error}</p>
+            <div className="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 mb-6 rounded shadow-md">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="font-bold text-lg flex items-center gap-2">
+                    {errorType === 'network' && '🌐'}
+                    {errorType === 'storage' && '💾'}
+                    {errorType === 'file-size' && '📦'}
+                    {errorType === 'permission' && '🔒'}
+                    {errorType === 'generic' && '⚠️'}
+                    Upload Failed
+                  </p>
+                  <p className="text-sm mt-2 leading-relaxed">{error}</p>
+                  
+                  {/* Helpful tips based on error type */}
+                  <div className="mt-4 p-3 bg-red-50 rounded border border-red-200">
+                    <p className="text-xs font-semibold mb-2">💡 Troubleshooting Tips:</p>
+                    <ul className="text-xs space-y-1 list-disc list-inside">
+                      {errorType === 'network' && (
+                        <>
+                          <li>Check if you have a stable internet connection</li>
+                          <li>Try moving to a location with better signal</li>
+                          <li>If using mobile data, ensure you have sufficient data</li>
+                          <li>Try connecting to a different network (WiFi/mobile data)</li>
+                          <li>Close other apps that might be using bandwidth</li>
+                        </>
+                      )}
+                      {errorType === 'storage' && (
+                        <>
+                          <li>Contact the administrators via email or phone</li>
+                          <li>This is a temporary issue that will be resolved soon</li>
+                        </>
+                      )}
+                      {errorType === 'file-size' && (
+                        <>
+                          <li>Compress your video file using a video compressor app</li>
+                          <li>Ensure your video is under 500MB</li>
+                          <li>Try using a lower video quality/resolution</li>
+                          <li>Consider trimming the video if it&apos;s too long</li>
+                        </>
+                      )}
+                      {errorType === 'permission' && (
+                        <>
+                          <li>This is a system configuration issue</li>
+                          <li>Please contact the administrators for assistance</li>
+                          <li>Provide them with this error message</li>
+                        </>
+                      )}
+                      {errorType === 'generic' && (
+                        <>
+                          <li>Ensure your files are in the correct format</li>
+                          <li>Check that your files aren&apos;t corrupted</li>
+                          <li>Try refreshing the page and submitting again</li>
+                          <li>If the problem persists, contact support</li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={() => {
+                    setError('');
+                    setErrorType('');
+                    setCanRetry(false);
+                  }}
+                  className="ml-4 text-red-600 hover:text-red-800 font-bold text-xl"
+                  aria-label="Dismiss error"
+                >
+                  ×
+                </button>
+              </div>
+              
+              {/* Retry button */}
+              {canRetry && (
+                <div className="mt-4 flex gap-3">
+                  <button
+                    onClick={() => {
+                      setError('');
+                      setErrorType('');
+                      setCanRetry(false);
+                      setVideoProgress(0);
+                      setPaymentProgress(0);
+                      // Form data is preserved, user can resubmit
+                    }}
+                    className="px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg font-semibold text-sm transition-colors"
+                  >
+                    🔄 Try Again
+                  </button>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold text-sm transition-colors"
+                  >
+                    ↻ Refresh Page
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -444,7 +701,7 @@ export default function SubmitAudition() {
 
               {/* File Uploads */}
               <div>
-                <h2 className="text-xl text-gray-800 font-bold text-green-800 mb-4 pb-2 border-b-2 border-green-200">
+                <h2 className="text-xl font-bold text-green-800 mb-4 pb-2 border-b-2 border-green-200">
                   Upload Files
                 </h2>
                 
@@ -461,9 +718,16 @@ export default function SubmitAudition() {
                     className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Accepted formats: MP4, MOV, AVI (Max 500MB)
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-gray-500 mt-1">
+                      Accepted formats: MP4, MOV, AVI (Max 500MB)
+                    </p>
+                    {formData.auditionVideo && (
+                      <p className="text-sm font-semibold mt-1 text-green-700">
+                        📁 {formatFileSize(formData.auditionVideo.size)}
+                      </p>
+                    )}
+                  </div>
                   {videoPreview && (
                     <div className="mt-2">
                       <video
@@ -517,9 +781,16 @@ export default function SubmitAudition() {
                     className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Accepted formats: JPG, PNG, PDF (Max 10MB)
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-gray-500 mt-1">
+                      Accepted formats: JPG, PNG, PDF (Max 10MB)
+                    </p>
+                    {formData.paymentProof && (
+                      <p className="text-sm font-semibold mt-1 text-green-700">
+                        📁 {formatFileSize(formData.paymentProof.size)}
+                      </p>
+                    )}
+                  </div>
                   {paymentPreview && formData.paymentProof?.type.startsWith('image/') && (
                     <div className="mt-2">
                       <img
