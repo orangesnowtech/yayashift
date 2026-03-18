@@ -13,7 +13,7 @@ export default function Home() {
   });
 
   useEffect(() => {
-    const deadline = new Date('2026-03-22T18:00:00').getTime();
+    const deadline = new Date('2026-03-30T18:00:00').getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -56,7 +56,7 @@ export default function Home() {
                 Favoured Family Regional Shift Competition
               </h1>
               <p className="text-center mt-1 md:mt-2 text-green-100 text-sm md:text-base">
-                March 27-28, 2026
+                April 17-18, 2026
               </p>
             </div>
             <div className="hidden md:block w-[80px]"></div>
@@ -108,7 +108,7 @@ export default function Home() {
                     <div className="text-[10px] md:text-xs text-green-500 mt-0.5 md:mt-1">Seconds</div>
                   </div>
                 </div>
-                <p className="text-green-700 text-[10px] md:text-xs mt-2 md:mt-3">Sunday, March 22 at 6:00 PM</p>
+                <p className="text-green-700 text-[10px] md:text-xs mt-2 md:mt-3">Monday, March 30 at 6:00 PM</p>
               </div>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function Home() {
                 <div className="bg-orange-100 p-4 rounded-lg border-l-4 border-orange-600">
                   <h4 className="font-semibold text-orange-800 mb-2">⏰ Deadline:</h4>
                   <p className="text-gray-800 font-semibold">
-                    Auditions close Sunday, March 22 at 6:00 PM
+                    Auditions close Monday, March 30 at 6:00 PM
                   </p>
                 </div>
               </div>
@@ -210,13 +210,13 @@ export default function Home() {
               </h3>
               <div className="ml-14 space-y-4">
                 <div className="bg-white p-4 rounded-lg border-l-4 border-green-600">
-                  <h4 className="font-semibold text-green-700 mb-2">📅 Day 1 (Semi-Finals) - March 27, 2026:</h4>
+                  <h4 className="font-semibold text-green-700 mb-2">📅 Day 1 (Semi-Finals) - April 17, 2026:</h4>
                   <p className="text-gray-700">
                     The selected 15 contestants will perform live. Each participant must prepare two distinct acts to demonstrate their versatility and skill, vying for a spot in the finals.
                   </p>
                 </div>
                 <div className="bg-white p-4 rounded-lg border-l-4 border-orange-600">
-                  <h4 className="font-semibold text-orange-700 mb-2">🏅 Day 2 (Finals) - March 28, 2026:</h4>
+                  <h4 className="font-semibold text-orange-700 mb-2">🏅 Day 2 (Finals) - April 18, 2026:</h4>
                   <p className="text-gray-700">
                     The top 6 finalists compete for the grand prize and international representation.
                   </p>
