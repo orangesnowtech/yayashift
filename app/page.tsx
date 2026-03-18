@@ -264,7 +264,7 @@ export default function Home() {
         <section className="max-w-6xl mx-auto mb-8 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 md:mb-12">Cash Prizes</h2>
           <div className="bg-gradient-to-br from-green-700 to-orange-600 rounded-xl shadow-2xl p-8 text-white">
-            <p className="text-center text-xl mb-8 text-white font-semibold">Per Category</p>
+            
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center bg-white bg-opacity-20 rounded-lg p-8 backdrop-blur-sm">
                 <div className="text-5xl mb-4">🥇</div>
